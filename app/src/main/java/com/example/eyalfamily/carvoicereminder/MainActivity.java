@@ -23,13 +23,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        myAudioRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-        myAudioRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-        myAudioRecorder.setAudioEncoder(MediaRecorder.OutputFormat.AMR_NB);
-        String outputFile;//
-        outputFile = getFilesDir() + "/recording.3gp";
-        myAudioRecorder.setOutputFile(outputFile);
     }
 
     @Override
@@ -63,6 +56,14 @@ public class MainActivity extends AppCompatActivity {
         {
             button.setText("Stop Recording");
 
+            myAudioRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+            myAudioRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+            myAudioRecorder.setAudioEncoder(MediaRecorder.OutputFormat.AMR_NB);
+            String outputFile;//
+            outputFile = getFilesDir() + "/recording.3gp";
+            myAudioRecorder.setOutputFile(outputFile);
+
+
             myAudioRecorder.prepare();
             myAudioRecorder.start();
 
@@ -72,8 +73,8 @@ public class MainActivity extends AppCompatActivity {
         {
             button.setText("Start Recording");
             myAudioRecorder.stop();
-            myAudioRecorder.release();
-            myAudioRecorder  = null;
+            //myAudioRecorder.release();
+            //myAudioRecorder  = null;
 
             Toast.makeText(getApplicationContext(), "Recording stopped", Toast.LENGTH_LONG).show();
         }

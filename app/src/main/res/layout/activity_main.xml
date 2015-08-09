@@ -13,14 +13,17 @@
         >
 
         <Button
-            android:layout_width="250dp"
-            android:layout_height="250dp"
+            android:layout_width="300dp"
+            android:layout_height="300dp"
             android:text="Start Record"
             android:id="@+id/RecordButton"
             android:layout_gravity="center"
             android:clickable="true"
             android:onClick="recordAction"
-            android:enabled="true" />
+            android:enabled="true"
+            android:background="@drawable/round_button"
+            android:textSize="30sp"
+            android:textStyle="bold"/>
 
         <Button
             android:layout_width="212dp"
