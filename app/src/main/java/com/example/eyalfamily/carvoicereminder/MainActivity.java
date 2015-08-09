@@ -27,11 +27,9 @@ public class MainActivity extends AppCompatActivity {
         myAudioRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
         myAudioRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
         myAudioRecorder.setAudioEncoder(MediaRecorder.OutputFormat.AMR_NB);
-        String outputFile = null;
+        String outputFile;
         outputFile = getFilesDir() + "/recording.3gp";
         myAudioRecorder.setOutputFile(outputFile);
-
-        // check
     }
 
     @Override
