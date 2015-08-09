@@ -30,6 +30,8 @@ public class MainActivity extends AppCompatActivity {
         String outputFile = null;
         outputFile = getFilesDir() + "/recording.3gp";
         myAudioRecorder.setOutputFile(outputFile);
+
+        // check
     }
 
     @Override
