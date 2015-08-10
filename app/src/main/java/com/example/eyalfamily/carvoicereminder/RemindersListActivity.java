@@ -27,6 +27,10 @@ public class RemindersListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reminders);
 
+        buildList();
+    }
+
+    private void buildList() {
         ListView lv = (ListView) findViewById(R.id.RemindersList);
 
         // Instanciating an array list (you don't need to do this,
@@ -109,5 +113,10 @@ public class RemindersListActivity extends AppCompatActivity {
             remindersList.add(fileList[i].getName());
         }
         return remindersList;
+    }
+
+    public void onDeleteReminders(MenuItem item) {
+        Services.DeleteAllReminders(this);
+        buildList();
     }
 }

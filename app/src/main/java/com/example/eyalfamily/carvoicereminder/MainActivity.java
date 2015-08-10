@@ -13,9 +13,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -131,4 +134,10 @@ public class MainActivity extends AppCompatActivity {
         Intent myIntent = new Intent(MainActivity.this,RemindersListActivity.class);
         startActivity(myIntent);
     }
+
+    public void onDeleteReminders(MenuItem item) {
+        Services.DeleteAllReminders(this);
+    }
+
+
 }
