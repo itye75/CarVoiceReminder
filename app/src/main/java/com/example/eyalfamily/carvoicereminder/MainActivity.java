@@ -1,10 +1,12 @@
 package com.example.eyalfamily.carvoicereminder;
 
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,12 +14,14 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
 
     private boolean m_recording;
     MediaRecorder myAudioRecorder = new MediaRecorder();
-    MediaPlayer m_mediaPlayer;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,37 +58,57 @@ public class MainActivity extends AppCompatActivity {
 
         if(m_recording)
         {
-            button.setText("Stop Recording");
+            try {
+                myAudioRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+                myAudioRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+                myAudioRecorder.setAudioEncoder(MediaRecorder.OutputFormat.AMR_NB);
+                String outputFile;
 
-            myAudioRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-            myAudioRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-            myAudioRecorder.setAudioEncoder(MediaRecorder.OutputFormat.AMR_NB);
-            String outputFile;//
-            outputFile = getFilesDir() + "/recording.3gp";
-            myAudioRecorder.setOutputFile(outputFile);
+                Calendar c = Calendar.getInstance();
+                SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd_ HH-mm-ss");
+                String formattedDateTime = df.format(c.getTime());
+
+                outputFile = getFilesDir() + "/new_Reminder_"+ formattedDateTime + ".3gp";
+                myAudioRecorder.setOutputFile(outputFile);
 
 
-            myAudioRecorder.prepare();
-            myAudioRecorder.start();
+                myAudioRecorder.prepare();
 
-            Toast.makeText(getApplicationContext(), "Recording started", Toast.LENGTH_LONG).show();
+                myAudioRecorder.start();
+
+                button.setText("Stop Recording");
+                Toast.makeText(getApplicationContext(), "Recording started", Toast.LENGTH_LONG).show();
+            }catch(Exception e)
+            {
+                e.printStackTrace();
+                return;
+            }
         }
         else
         {
-            button.setText("Start Recording");
-            myAudioRecorder.stop();
-            //myAudioRecorder.release();
-            //myAudioRecorder  = null;
+            try {
+                myAudioRecorder.stop();
 
-            Toast.makeText(getApplicationContext(), "Recording stopped", Toast.LENGTH_LONG).show();
+
+                //myAudioRecorder.release();
+                //myAudioRecorder  = null;
+
+                button.setText("Start Recording");
+                Toast.makeText(getApplicationContext(), "Recording stopped", Toast.LENGTH_LONG).show();
+            }
+            catch(Exception e)
+            {
+                e.printStackTrace();
+                return;
+            }
         }
 
 
     }
 
-    public void play(View view)
+/*    public void play(View view)
     {
-        String recordFile = getFilesDir() + "/recording.3gp";
+        *//* recordFile = getFilesDir() + "/recording.3gp";
         try
         {
             if(m_mediaPlayer != null)
@@ -100,5 +124,11 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        *//*
+    }*/
+
+    public void onListClick(View view) {
+        Intent myIntent = new Intent(MainActivity.this,RemindersListActivity.class);
+        startActivity(myIntent);
     }
 }

@@ -13,26 +13,30 @@
         >
 
         <Button
+
             android:layout_width="300dp"
             android:layout_height="300dp"
             android:text="Start Record"
             android:id="@+id/RecordButton"
-            android:layout_gravity="center"
+            android:layout_gravity="top|center"
             android:clickable="true"
             android:onClick="recordAction"
             android:enabled="true"
             android:background="@drawable/round_button"
             android:textSize="30sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold"
+            android:layout_margin="50px"
+            />
 
         <Button
-            android:layout_width="212dp"
-            android:layout_height="91dp"
-            android:text="Play"
+            android:layout_width="match_parent"
+            android:layout_height="90dp"
+            android:text="Record List"
+            android:textSize="30sp"
             android:id="@+id/button"
             android:layout_gravity="center_horizontal|bottom"
             android:clickable="true"
             android:enabled="true"
-            android:onClick="play" />
+            android:onClick="onListClick" />
     </FrameLayout>
 </RelativeLayout>
