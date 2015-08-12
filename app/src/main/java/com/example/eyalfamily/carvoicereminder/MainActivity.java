@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
                 SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd_ HH-mm-ss");
                 String formattedDateTime = df.format(c.getTime());
 
-                outputFile = getFilesDir() + "/new_Reminder_"+ formattedDateTime + ".3gp";
+                outputFile = getFilesDir() + "/Reminder_"+ formattedDateTime + ".3gp";
                 myAudioRecorder.setOutputFile(outputFile);
 
 

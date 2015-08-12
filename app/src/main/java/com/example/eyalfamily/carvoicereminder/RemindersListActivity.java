@@ -30,6 +30,13 @@ public class RemindersListActivity extends AppCompatActivity {
         buildList();
     }
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+
+        buildList();
+    }
+
     private void buildList() {
         ListView lv = (ListView) findViewById(R.id.RemindersList);
 
@@ -110,7 +117,7 @@ public class RemindersListActivity extends AppCompatActivity {
         for (int i=0; i < fileList.length; i++)
         {
             Log.d("Files", "FileName:" + fileList[i].getName());
-            remindersList.add(fileList[i].getName());
+            remindersList.add(fileList[i].getName().replace("Reminder_", ""));
         }
         return remindersList;
     }
