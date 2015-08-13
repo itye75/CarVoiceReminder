@@ -13,9 +13,8 @@
         >
 
         <Button
-
-            android:layout_width="300dp"
-            android:layout_height="300dp"
+            android:layout_width="320dp"
+            android:layout_height="320dp"
             android:text="Start Record"
             android:id="@+id/RecordButton"
             android:layout_gravity="top|center"
@@ -37,6 +36,7 @@
             android:layout_gravity="center_horizontal|bottom"
             android:clickable="true"
             android:enabled="true"
-            android:onClick="onListClick" />
+            android:onClick="onListClick"
+            android:background="@drawable/my_button"/>
     </FrameLayout>
 </RelativeLayout>

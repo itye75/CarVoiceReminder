@@ -68,10 +68,10 @@ public class MainActivity extends AppCompatActivity {
                 String outputFile;
 
                 Calendar c = Calendar.getInstance();
-                SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd_ HH-mm-ss");
+                SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd_HH+mm+ss");
                 String formattedDateTime = df.format(c.getTime());
 
-                outputFile = getFilesDir() + "/Reminder_"+ formattedDateTime + ".3gp";
+                outputFile = getFilesDir() + "/"+ Consts.FilePrefix + formattedDateTime + Consts.Extension;
                 myAudioRecorder.setOutputFile(outputFile);
 
 

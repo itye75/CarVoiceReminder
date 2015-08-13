@@ -1,15 +1,21 @@
 package com.example.eyalfamily.carvoicereminder;
 
+import android.app.AlertDialog;
+import android.app.Notification;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Pair;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -21,12 +27,13 @@ public class RemindersListActivity extends AppCompatActivity {
 
     private List<String> filesList;
     MediaPlayer m_mediaPlayer;
+    private android.content.Context m_context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reminders);
-
+        m_context = this;
         buildList();
     }
 
@@ -42,40 +49,71 @@ public class RemindersListActivity extends AppCompatActivity {
 
         // Instanciating an array list (you don't need to do this,
         // you already have yours).
-        List<String> your_array_list = getFilesList();
+        List<ReminderRecord> your_array_list = getFilesList();
 
         // This is the array adapter, it takes the context of the activity as a
         // first parameter, the type of list view as a second parameter and your
         // array as a third parameter.
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
+        ArrayAdapter<ReminderRecord> arrayAdapter = new ArrayAdapter<>(
                 this,
-                android.R.layout.simple_list_item_1,
+                R.layout.my_text_view,
                 your_array_list );
 
         lv.setAdapter(arrayAdapter);
 
-        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        lv.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position,
                                     long id) {
-                try
-                {
-                    if(m_mediaPlayer != null)
-                    {
-                        m_mediaPlayer.release();
-                    }
-
-                    m_mediaPlayer = new MediaPlayer();
-
-                    String fileName= (String) parent.getAdapter().getItem(position);
-                    m_mediaPlayer.setDataSource(getFilesDir() + "/" + fileName);
-                    m_mediaPlayer.prepare();
-                    m_mediaPlayer.start();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                playReminder(parent, position);
             }
         });
+
+        AdapterView.OnItemLongClickListener listener = new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                final ReminderRecord reminderRecord = (ReminderRecord) parent.getAdapter().getItem(position);
+
+                DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which){
+                            case DialogInterface.BUTTON_POSITIVE:
+                                reminderRecord.ReminderFile.delete();
+                                buildList();
+                                break;
+
+                            case DialogInterface.BUTTON_NEGATIVE:
+                                return;
+                        }
+                    }
+                };
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(m_context);
+                builder.setMessage("Delete?").setPositiveButton("Yes", dialogClickListener)
+                        .setNegativeButton("No", dialogClickListener).show();
+
+                return true;
+            }
+        };
+        lv.setOnItemLongClickListener(listener);
+    }
+
+    public void playReminder(AdapterView<?> parent, int position) {
+        try {
+            if (m_mediaPlayer != null) {
+                m_mediaPlayer.release();
+            }
+
+            m_mediaPlayer = new MediaPlayer();
+
+            ReminderRecord reminderRecord = (ReminderRecord) parent.getAdapter().getItem(position);
+            m_mediaPlayer.setDataSource(getFilesDir() + "/"+reminderRecord.ReminderFile.getName());
+            m_mediaPlayer.prepare();
+            m_mediaPlayer.start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -106,8 +144,8 @@ public class RemindersListActivity extends AppCompatActivity {
         startActivity(myIntent);
     }
 
-    public List<String> getFilesList() {
-        List<String> remindersList = new ArrayList<String>();
+    public List<ReminderRecord> getFilesList() {
+        List<ReminderRecord> remindersList = new ArrayList<>();
 
         String path = getFilesDir().toString();
 
@@ -117,9 +155,13 @@ public class RemindersListActivity extends AppCompatActivity {
         for (int i=0; i < fileList.length; i++)
         {
             Log.d("Files", "FileName:" + fileList[i].getName());
-            remindersList.add(fileList[i].getName().replace("Reminder_", ""));
+            remindersList.add(new ReminderRecord(fileList[i], formatFileName(fileList[i].getName())));
         }
         return remindersList;
+    }
+
+    private String formatFileName(String p_fileName) {
+        return p_fileName.replace(Consts.Extension, "").replace(Consts.FilePrefix, "").replace("_"," ").replace("-","/").replace("+",":");
     }
 
     public void onDeleteReminders(MenuItem item) {
