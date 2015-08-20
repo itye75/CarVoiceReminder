@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.Notification;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
@@ -18,9 +19,13 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class RemindersListActivity extends AppCompatActivity {
@@ -90,8 +95,19 @@ public class RemindersListActivity extends AppCompatActivity {
                 };
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(m_context);
-                builder.setMessage("Delete?").setPositiveButton("Yes", dialogClickListener)
+                AlertDialog dialog= builder.setMessage("Are you sure you want to delete record?").setPositiveButton("Yes", dialogClickListener)
                         .setNegativeButton("No", dialogClickListener).show();
+                TextView textViewMessage = (TextView) dialog.findViewById(android.R.id.message);
+                textViewMessage.setTextSize(20);
+
+                TextView textViewButton1 = (TextView) dialog.findViewById(android.R.id.button1);
+                textViewButton1.setTextSize(20);
+
+                TextView textViewButton2 = (TextView) dialog.findViewById(android.R.id.button2);
+                textViewButton2.setTextSize(20);
+
+                TextView textViewButton3 = (TextView) dialog.findViewById(android.R.id.button3);
+                textViewButton3.setTextSize(20);
 
                 return true;
             }
@@ -151,12 +167,28 @@ public class RemindersListActivity extends AppCompatActivity {
 
         File dir = new File(path);
         File fileList[] = dir.listFiles();
+
+
         Log.d("Files", "Size: "+ fileList.length);
         for (int i=0; i < fileList.length; i++)
         {
             Log.d("Files", "FileName:" + fileList[i].getName());
             remindersList.add(new ReminderRecord(fileList[i], formatFileName(fileList[i].getName())));
         }
+
+        Collections.sort(remindersList, new Comparator<ReminderRecord>() {
+            @Override
+            public int compare(ReminderRecord s1, ReminderRecord s2) {
+                return s1.ReminderText.compareTo(s2.ReminderText);
+            }
+        });
+//        Arrays.sort(remindersList, new Comparator<ReminderRecord>() {
+//            @Override
+//            public int compare(ReminderRecord entry1, ReminderRecord entry2) {
+//                return entry1.ReminderText.compareTo(entry2.ReminderText);
+//            }
+//        });
+
         return remindersList;
     }
 
