@@ -1,19 +1,14 @@
 package com.example.eyalfamily.carvoicereminder;
 
 import android.app.AlertDialog;
-import android.app.Notification;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.media.MediaPlayer;
-import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.util.Pair;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -23,7 +18,6 @@ import android.widget.TextView;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -33,6 +27,8 @@ public class RemindersListActivity extends AppCompatActivity {
     private List<String> filesList;
     MediaPlayer m_mediaPlayer;
     private android.content.Context m_context;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +50,12 @@ public class RemindersListActivity extends AppCompatActivity {
 
         // Instanciating an array list (you don't need to do this,
         // you already have yours).
-        List<ReminderRecord> your_array_list = getFilesList();
+        List<ReminderRecord> your_array_list = Services.GetFilesList(m_context);
+
+        if(your_array_list.size()==0)
+        {
+            Services.RemoveNotification(m_context);
+        }
 
         // This is the array adapter, it takes the context of the activity as a
         // first parameter, the type of list view as a second parameter and your
@@ -160,41 +161,9 @@ public class RemindersListActivity extends AppCompatActivity {
         startActivity(myIntent);
     }
 
-    public List<ReminderRecord> getFilesList() {
-        List<ReminderRecord> remindersList = new ArrayList<>();
-
-        String path = getFilesDir().toString();
-
-        File dir = new File(path);
-        File fileList[] = dir.listFiles();
 
 
-        Log.d("Files", "Size: "+ fileList.length);
-        for (int i=0; i < fileList.length; i++)
-        {
-            Log.d("Files", "FileName:" + fileList[i].getName());
-            remindersList.add(new ReminderRecord(fileList[i], formatFileName(fileList[i].getName())));
-        }
 
-        Collections.sort(remindersList, new Comparator<ReminderRecord>() {
-            @Override
-            public int compare(ReminderRecord s1, ReminderRecord s2) {
-                return s1.ReminderText.compareTo(s2.ReminderText);
-            }
-        });
-//        Arrays.sort(remindersList, new Comparator<ReminderRecord>() {
-//            @Override
-//            public int compare(ReminderRecord entry1, ReminderRecord entry2) {
-//                return entry1.ReminderText.compareTo(entry2.ReminderText);
-//            }
-//        });
-
-        return remindersList;
-    }
-
-    private String formatFileName(String p_fileName) {
-        return p_fileName.replace(Consts.Extension, "").replace(Consts.FilePrefix, "").replace("_"," ").replace("-","/").replace("+",":");
-    }
 
     public void onDeleteReminders(MenuItem item) {
         Services.DeleteAllReminders(this);

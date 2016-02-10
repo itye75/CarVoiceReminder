@@ -1,9 +1,12 @@
 package com.example.eyalfamily.carvoicereminder;
 
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.Environment;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -24,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean m_recording;
     MediaRecorder myAudioRecorder = new MediaRecorder();
+    private int m_nId;
 
     @Override
     public void onBackPressed() {
@@ -37,6 +41,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        if(Services.GetFilesList(this).size()!=0)
+        {
+            Services.AddNotification(this);
+        }
     }
 
     @Override
@@ -62,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void recordAction(View view) throws IOException {
-        Button button = (Button)findViewById(R.id.RecordButton);
+        Button button = (Button) findViewById(R.id.RecordButton);
 
         m_recording = !m_recording;
 
@@ -105,6 +114,8 @@ public class MainActivity extends AppCompatActivity {
 
                 button.setText("Start Recording");
                 Toast.makeText(getApplicationContext(), "Recording stopped", Toast.LENGTH_LONG).show();
+
+                Services.AddNotification(this);
             }
             catch(Exception e)
             {
@@ -115,6 +126,8 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
+
 
 /*    public void play(View view)
     {
