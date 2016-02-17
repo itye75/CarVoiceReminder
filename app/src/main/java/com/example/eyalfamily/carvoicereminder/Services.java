@@ -74,9 +74,8 @@ public class Services{
     public static void AddNotification(Context p_this) {
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(p_this)
-                        .setSmallIcon(R.drawable.n)
-                        .setContentTitle("My notification")
-                        .setContentText("Hello World!");
+                        .setSmallIcon(R.drawable.icon)
+                        .setContentTitle("You have a reminder");
 
         NotificationManager mNotificationManager =
                 (NotificationManager) p_this.getSystemService(Context.NOTIFICATION_SERVICE);
