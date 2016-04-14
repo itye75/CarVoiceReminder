@@ -8,6 +8,7 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -25,7 +26,20 @@ public class Services{
         String path = p_context.getFilesDir().toString();
 
         File dir = new File(path);
-        File fileList[] = dir.listFiles();
+
+        FilenameFilter fileFilter = new FilenameFilter() {
+            File f;
+            public boolean accept(File dir, String name) {
+                if(name.endsWith(".3gp")) {
+                    return true;
+                }
+                f = new File(dir.getAbsolutePath()+"/"+name);
+
+                return f.isDirectory();
+            }
+        };
+
+        File fileList[] = dir.listFiles(fileFilter);
 
 
         Log.d("Files", "Size: " + fileList.length);
