@@ -1,8 +1,11 @@
 package com.example.eyalfamily.carvoicereminder;
 
 import android.app.Activity;
+import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Environment;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
@@ -33,9 +36,10 @@ public class Services{
                 if(name.endsWith(".3gp")) {
                     return true;
                 }
-                f = new File(dir.getAbsolutePath()+"/"+name);
-
-                return f.isDirectory();
+                else
+                {
+                    return false;
+                }
             }
         };
 
@@ -90,6 +94,18 @@ public class Services{
                 new NotificationCompat.Builder(p_this)
                         .setSmallIcon(R.drawable.icon)
                         .setContentTitle("You have a reminder");
+
+        Intent resultIntent = new Intent(p_this, RemindersListActivity.class);
+
+        PendingIntent resultPendingIntent =
+                PendingIntent.getActivity(
+                        p_this,
+                        0,
+                        resultIntent,
+                        PendingIntent.FLAG_UPDATE_CURRENT
+                );
+
+        mBuilder.setContentIntent(resultPendingIntent);
 
         NotificationManager mNotificationManager =
                 (NotificationManager) p_this.getSystemService(Context.NOTIFICATION_SERVICE);
